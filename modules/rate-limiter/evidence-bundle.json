@@ -1,0 +1,372 @@
+{
+  "schema": "rea.evidence.bundle.v1",
+  "evidence_id": "EV-RL-HTTP-11F51A20DF",
+  "captured_at": "2026-11-19T16:49:37.338Z",
+  "authorization": {
+    "scope": "self-hosted-loopback-lab",
+    "target": "local://modules/rate-limiter/model.mjs (Node.js HTTP/1.1)",
+    "redaction_verified": true,
+    "excluded_fields": [
+      "ephemeral_port",
+      "authorization_header",
+      "cookies",
+      "client_ip"
+    ]
+  },
+  "source_sha256": "11f51a20df2932d68519ab09b3911e3c32b8d203835b3a8ba4c457ab3a7310fb",
+  "summary": {
+    "total_requests": 15,
+    "http_200_admitted": 7,
+    "http_429_rejected": 8,
+    "first_429_ordinal": 7,
+    "post_refill_status": 200,
+    "peak_threat_level": "HIGH"
+  },
+  "observations": [
+    "Captured 15 sequential HTTP/1.1 exchanges against local Token Bucket (B=6, r=2.0 tok/s); SHA-256=11f51a20df2932d6…",
+    "Ordinals 1–6 returned HTTP 200 with monotonically decreasing X-RateLimit-Remaining (5 → 0).",
+    "Ordinal 7 returned HTTP 429 Too Many Requests with Retry-After=1s when bucket reached 0.",
+    "After a 600ms pause (~1.2 tokens refilled), ordinal 10 returned HTTP 200, proving continuous fractional refill without waiting for a fixed window boundary.",
+    "During Wave 3 (/v1/auth/login burst), X-Threat-Level escalated to ELEVATED → HIGH, tightening X-RateLimit-Limit dynamically from 6 down to 3."
+  ],
+  "inferences": [
+    "Single-process atomic state evaluation prevented TOCTOU race conditions during back-to-back burst requests; in multi-node production this exact invariant requires an atomic Redis Lua script or Durable Object single-threaded actor.",
+    "Returning explicit Retry-After + X-RateLimit-* headers enables well-behaved clients to apply exponential backoff with full jitter instead of inducing a metastable retry storm."
+  ],
+  "unknowns_and_limits": [
+    "Single loopback Node.js process does not measure cross-AZ Redis network RTT, clock skew across distributed gateways, or L4 SYN flood behavior.",
+    "Passive capture covers only the declared 15-request lab scenario; unexercised edge cases (Redis failover fail-open vs fail-closed) remain unverified by this trace."
+  ],
+  "records": [
+    {
+      "ordinal": 1,
+      "offset_ms": 0.2,
+      "latency_ms": 102.54,
+      "method": "GET",
+      "path": "/v1/orders",
+      "wave": "steady",
+      "status": 200,
+      "headers": {
+        "x-ratelimit-limit": "6",
+        "x-ratelimit-remaining": "5",
+        "x-ratelimit-reset": "1",
+        "retry-after": null,
+        "x-threat-level": "NORMAL"
+      },
+      "body_sha256": "00fc2a354ffd04c6",
+      "body_preview": {
+        "ok": true,
+        "endpoint": "/v1/orders",
+        "remaining": 5
+      }
+    },
+    {
+      "ordinal": 2,
+      "offset_ms": 103.8,
+      "latency_ms": 10.01,
+      "method": "GET",
+      "path": "/v1/orders",
+      "wave": "steady",
+      "status": 200,
+      "headers": {
+        "x-ratelimit-limit": "6",
+        "x-ratelimit-remaining": "4",
+        "x-ratelimit-reset": "2",
+        "retry-after": null,
+        "x-threat-level": "NORMAL"
+      },
+      "body_sha256": "49d4049c5d425b03",
+      "body_preview": {
+        "ok": true,
+        "endpoint": "/v1/orders",
+        "remaining": 4
+      }
+    },
+    {
+      "ordinal": 3,
+      "offset_ms": 114.1,
+      "latency_ms": 5.33,
+      "method": "GET",
+      "path": "/v1/orders",
+      "wave": "steady",
+      "status": 200,
+      "headers": {
+        "x-ratelimit-limit": "6",
+        "x-ratelimit-remaining": "3",
+        "x-ratelimit-reset": "2",
+        "retry-after": null,
+        "x-threat-level": "NORMAL"
+      },
+      "body_sha256": "eab96e11d07259ba",
+      "body_preview": {
+        "ok": true,
+        "endpoint": "/v1/orders",
+        "remaining": 3
+      }
+    },
+    {
+      "ordinal": 4,
+      "offset_ms": 119.6,
+      "latency_ms": 5.04,
+      "method": "GET",
+      "path": "/v1/orders",
+      "wave": "steady",
+      "status": 200,
+      "headers": {
+        "x-ratelimit-limit": "6",
+        "x-ratelimit-remaining": "2",
+        "x-ratelimit-reset": "3",
+        "retry-after": null,
+        "x-threat-level": "NORMAL"
+      },
+      "body_sha256": "eccef5eaa6d96753",
+      "body_preview": {
+        "ok": true,
+        "endpoint": "/v1/orders",
+        "remaining": 2
+      }
+    },
+    {
+      "ordinal": 5,
+      "offset_ms": 125,
+      "latency_ms": 6.06,
+      "method": "GET",
+      "path": "/v1/orders",
+      "wave": "burst",
+      "status": 200,
+      "headers": {
+        "x-ratelimit-limit": "6",
+        "x-ratelimit-remaining": "1",
+        "x-ratelimit-reset": "3",
+        "retry-after": null,
+        "x-threat-level": "NORMAL"
+      },
+      "body_sha256": "86b01a6a3fa46f44",
+      "body_preview": {
+        "ok": true,
+        "endpoint": "/v1/orders",
+        "remaining": 1
+      }
+    },
+    {
+      "ordinal": 6,
+      "offset_ms": 131.2,
+      "latency_ms": 6.08,
+      "method": "GET",
+      "path": "/v1/orders",
+      "wave": "burst",
+      "status": 200,
+      "headers": {
+        "x-ratelimit-limit": "6",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "4",
+        "retry-after": null,
+        "x-threat-level": "NORMAL"
+      },
+      "body_sha256": "25c7ae7de1cb5fa3",
+      "body_preview": {
+        "ok": true,
+        "endpoint": "/v1/orders",
+        "remaining": 0
+      }
+    },
+    {
+      "ordinal": 7,
+      "offset_ms": 137.6,
+      "latency_ms": 15.21,
+      "method": "GET",
+      "path": "/v1/orders",
+      "wave": "burst",
+      "status": 429,
+      "headers": {
+        "x-ratelimit-limit": "6",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "2",
+        "retry-after": "1",
+        "x-threat-level": "NORMAL"
+      },
+      "body_sha256": "c09f860548299c6e",
+      "body_preview": {
+        "error": "rate_limit_exceeded",
+        "reason": "rate_limit_exceeded",
+        "retry_after": 1
+      }
+    },
+    {
+      "ordinal": 8,
+      "offset_ms": 153,
+      "latency_ms": 3.31,
+      "method": "GET",
+      "path": "/v1/orders",
+      "wave": "burst",
+      "status": 429,
+      "headers": {
+        "x-ratelimit-limit": "6",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "2",
+        "retry-after": "1",
+        "x-threat-level": "NORMAL"
+      },
+      "body_sha256": "c09f860548299c6e",
+      "body_preview": {
+        "error": "rate_limit_exceeded",
+        "reason": "rate_limit_exceeded",
+        "retry_after": 1
+      }
+    },
+    {
+      "ordinal": 9,
+      "offset_ms": 156.5,
+      "latency_ms": 9.93,
+      "method": "GET",
+      "path": "/v1/orders",
+      "wave": "burst",
+      "status": 429,
+      "headers": {
+        "x-ratelimit-limit": "6",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "2",
+        "retry-after": "1",
+        "x-threat-level": "NORMAL"
+      },
+      "body_sha256": "c09f860548299c6e",
+      "body_preview": {
+        "error": "rate_limit_exceeded",
+        "reason": "rate_limit_exceeded",
+        "retry_after": 1
+      }
+    },
+    {
+      "ordinal": 10,
+      "offset_ms": 775,
+      "latency_ms": 12.95,
+      "method": "GET",
+      "path": "/v1/orders",
+      "wave": "post-refill",
+      "status": 200,
+      "headers": {
+        "x-ratelimit-limit": "6",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "4",
+        "retry-after": null,
+        "x-threat-level": "NORMAL"
+      },
+      "body_sha256": "25c7ae7de1cb5fa3",
+      "body_preview": {
+        "ok": true,
+        "endpoint": "/v1/orders",
+        "remaining": 0
+      }
+    },
+    {
+      "ordinal": 11,
+      "offset_ms": 788.2,
+      "latency_ms": 4.25,
+      "method": "GET",
+      "path": "/v1/auth/login",
+      "wave": "credential-stuffing",
+      "status": 429,
+      "headers": {
+        "x-ratelimit-limit": "5",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "2",
+        "retry-after": "1",
+        "x-threat-level": "ELEVATED"
+      },
+      "body_sha256": "c09f860548299c6e",
+      "body_preview": {
+        "error": "rate_limit_exceeded",
+        "reason": "rate_limit_exceeded",
+        "retry_after": 1
+      }
+    },
+    {
+      "ordinal": 12,
+      "offset_ms": 795.9,
+      "latency_ms": 5.6,
+      "method": "GET",
+      "path": "/v1/auth/login",
+      "wave": "credential-stuffing",
+      "status": 429,
+      "headers": {
+        "x-ratelimit-limit": "5",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "2",
+        "retry-after": "1",
+        "x-threat-level": "ELEVATED"
+      },
+      "body_sha256": "c09f860548299c6e",
+      "body_preview": {
+        "error": "rate_limit_exceeded",
+        "reason": "rate_limit_exceeded",
+        "retry_after": 1
+      }
+    },
+    {
+      "ordinal": 13,
+      "offset_ms": 801.6,
+      "latency_ms": 2.84,
+      "method": "GET",
+      "path": "/v1/auth/login",
+      "wave": "credential-stuffing",
+      "status": 429,
+      "headers": {
+        "x-ratelimit-limit": "3",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "2",
+        "retry-after": "1",
+        "x-threat-level": "HIGH"
+      },
+      "body_sha256": "c09f860548299c6e",
+      "body_preview": {
+        "error": "rate_limit_exceeded",
+        "reason": "rate_limit_exceeded",
+        "retry_after": 1
+      }
+    },
+    {
+      "ordinal": 14,
+      "offset_ms": 804.5,
+      "latency_ms": 3.07,
+      "method": "GET",
+      "path": "/v1/auth/login",
+      "wave": "credential-stuffing",
+      "status": 429,
+      "headers": {
+        "x-ratelimit-limit": "3",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "5",
+        "retry-after": "4",
+        "x-threat-level": "HIGH"
+      },
+      "body_sha256": "f62192792eb3d7d7",
+      "body_preview": {
+        "error": "rate_limit_exceeded",
+        "reason": "adaptive_threat_block",
+        "retry_after": 4
+      }
+    },
+    {
+      "ordinal": 15,
+      "offset_ms": 807.7,
+      "latency_ms": 26.47,
+      "method": "GET",
+      "path": "/v1/auth/login",
+      "wave": "credential-stuffing",
+      "status": 429,
+      "headers": {
+        "x-ratelimit-limit": "3",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "5",
+        "retry-after": "4",
+        "x-threat-level": "HIGH"
+      },
+      "body_sha256": "f62192792eb3d7d7",
+      "body_preview": {
+        "error": "rate_limit_exceeded",
+        "reason": "adaptive_threat_block",
+        "retry_after": 4
+      }
+    }
+  ]
+}

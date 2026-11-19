@@ -1,0 +1,383 @@
+/* Stage & 3D Anatomy indicator styles (dark + light paper parity) */
+.rl-stage {
+  touch-action: pan-y;
+  cursor: grab;
+  outline: none;
+  border-radius: 0;
+}
+.rl-stage:focus-visible {
+  outline: 1px solid var(--anatomy-muted);
+  outline-offset: 6px;
+}
+.rl-stage[data-drag] {
+  cursor: grabbing;
+}
+.rl-gl {
+  display: block;
+}
+.rl-led {
+  --rl-led: #2fb36f;
+  --rl-led-pale: #e9fff2;
+}
+.iso[data-theme="dark"] .rl-led {
+  --rl-led: #5cf0a0;
+  --rl-led-pale: #f2fff7;
+}
+.rl-stage[data-alert="warn"] .rl-led {
+  --rl-led: #d9822b;
+  --rl-led-pale: #fff6e6;
+}
+.iso[data-theme="dark"] .rl-stage[data-alert="warn"] .rl-led {
+  --rl-led: #ffb84d;
+  --rl-led-pale: #fff9ec;
+}
+.rl-stage[data-alert="crit"] .rl-led {
+  --rl-led: #d93848;
+  --rl-led-pale: #ffecef;
+}
+.iso[data-theme="dark"] .rl-stage[data-alert="crit"] .rl-led {
+  --rl-led: #ff6b78;
+  --rl-led-pale: #fff0f2;
+}
+.rl-led-halo {
+  fill: var(--rl-led);
+  opacity: 0.2;
+}
+.rl-led-body {
+  fill: var(--rl-led);
+}
+.rl-led-core {
+  fill: var(--rl-led-pale);
+}
+.rl-stage[data-gl] .rl-led {
+  opacity: var(--rl-fallback, 0);
+}
+
+/* 4-Layer System Design Workbench (outside .iso-plate so anatomy tools clip cleanly) */
+.wb {
+  margin-top: 22px;
+  display: grid;
+  gap: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--anatomy-text);
+}
+.wb-card {
+  background: var(--anatomy-card);
+  box-shadow: 0 0 0 1px var(--anatomy-faint);
+  padding: 16px 18px;
+}
+.wb-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.wb-eyebrow {
+  font-family: var(--anatomy-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--anatomy-muted);
+}
+.wb-theme-link {
+  font-family: var(--anatomy-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--anatomy-text);
+  text-decoration: none;
+  padding: 4px 9px;
+  border: 1px solid var(--anatomy-lo);
+  transition: border-color 180ms var(--anatomy-ease), color 180ms var(--anatomy-ease);
+}
+.wb-theme-link:hover {
+  border-color: var(--anatomy-hi);
+  color: var(--anatomy-strong);
+}
+
+/* Control bar */
+.wb-controls {
+  display: grid;
+  gap: 12px;
+}
+.wb-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.wb-seg {
+  display: inline-flex;
+  border: 1px solid var(--anatomy-lo);
+  overflow: hidden;
+}
+.wb-btn {
+  appearance: none;
+  background: transparent;
+  color: var(--anatomy-text);
+  border: 1px solid var(--anatomy-lo);
+  font-family: var(--anatomy-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background-color 160ms var(--anatomy-ease), color 160ms var(--anatomy-ease), border-color 160ms var(--anatomy-ease);
+}
+.wb-seg .wb-btn {
+  border: none;
+  border-right: 1px solid var(--anatomy-faint);
+}
+.wb-seg .wb-btn:last-child {
+  border-right: none;
+}
+.wb-btn:hover {
+  color: var(--anatomy-strong);
+  border-color: var(--anatomy-mid);
+}
+.wb-btn[data-active="true"] {
+  background: var(--anatomy-strong);
+  color: var(--anatomy-card);
+  border-color: var(--anatomy-strong);
+}
+.wb-btn[data-danger="true"] {
+  border-color: var(--anatomy-red);
+  color: var(--anatomy-red);
+}
+.wb-btn[data-danger="true"][data-active="true"] {
+  background: var(--anatomy-red);
+  color: #ffffff;
+}
+.wb-sliders {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px;
+}
+.wb-slider {
+  display: grid;
+  gap: 4px;
+}
+.wb-slider-label {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--anatomy-mono);
+  font-size: 11px;
+  color: var(--anatomy-muted);
+}
+.wb-slider-label strong {
+  color: var(--anatomy-strong);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.wb-slider input[type="range"] {
+  width: 100%;
+  accent-color: var(--anatomy-strong);
+  cursor: pointer;
+}
+
+/* Telemetry strip */
+.wb-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--anatomy-faint);
+}
+.wb-stat {
+  display: grid;
+  gap: 2px;
+}
+.wb-stat-k {
+  font-family: var(--anatomy-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--anatomy-muted);
+}
+.wb-stat-v {
+  font-family: var(--anatomy-mono);
+  font-size: 13px;
+  color: var(--anatomy-strong);
+  font-variant-numeric: tabular-nums;
+}
+.wb-stat-v[data-status="ok"] {
+  color: var(--anatomy-green);
+}
+.wb-stat-v[data-status="warn"] {
+  color: #d9822b;
+}
+.wb-stat-v[data-status="crit"] {
+  color: var(--anatomy-red);
+}
+
+/* Live HTTP trace ticker */
+.wb-log {
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: var(--anatomy-page);
+  border: 1px solid var(--anatomy-faint);
+  font-family: var(--anatomy-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  max-height: 92px;
+  overflow-y: auto;
+  color: var(--anatomy-muted);
+}
+.wb-log-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  white-space: nowrap;
+}
+.wb-log-row[data-code="200"] .wb-code {
+  color: var(--anatomy-green);
+}
+.wb-log-row[data-code="429"] .wb-code {
+  color: var(--anatomy-red);
+}
+
+/* 4-Layer Tabs */
+.wb-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  border-bottom: 1px solid var(--anatomy-faint);
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+.wb-tab {
+  appearance: none;
+  background: transparent;
+  color: var(--anatomy-muted);
+  border: 1px solid transparent;
+  font-family: var(--anatomy-mono);
+  font-size: 11px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.wb-tab:hover {
+  color: var(--anatomy-strong);
+}
+.wb-tab[aria-selected="true"] {
+  color: var(--anatomy-strong);
+  border-color: var(--anatomy-lo);
+  background: var(--anatomy-page);
+}
+.wb-pane {
+  display: none;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.wb-pane[data-open="true"] {
+  display: grid;
+  gap: 12px;
+}
+.wb-pane h3 {
+  margin: 0;
+  font-size: 13px;
+  font-family: var(--anatomy-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--anatomy-strong);
+}
+.wb-pane p {
+  margin: 0;
+}
+.wb-pre {
+  margin: 0;
+  padding: 12px;
+  background: var(--anatomy-page);
+  border: 1px solid var(--anatomy-faint);
+  overflow-x: auto;
+  font-family: var(--anatomy-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--anatomy-strong);
+}
+.wb-grid2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px;
+}
+.wb-box {
+  padding: 11px 12px;
+  background: var(--anatomy-page);
+  border: 1px solid var(--anatomy-faint);
+  display: grid;
+  gap: 6px;
+}
+.wb-badge {
+  display: inline-block;
+  font-family: var(--anatomy-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 2px 6px;
+  border: 1px solid var(--anatomy-lo);
+  color: var(--anatomy-strong);
+  width: fit-content;
+}
+.wb-badge[data-kind="obs"] {
+  border-color: var(--anatomy-green);
+  color: var(--anatomy-green);
+}
+.wb-badge[data-kind="inf"] {
+  border-color: var(--anatomy-blue);
+  color: var(--anatomy-blue);
+}
+.wb-badge[data-kind="unk"] {
+  border-color: var(--anatomy-red);
+  color: var(--anatomy-red);
+}
+.wb-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--anatomy-faint);
+}
+.wb-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--anatomy-mono);
+  font-size: 11px;
+}
+.wb-table th,
+.wb-table td {
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--anatomy-faint);
+  white-space: nowrap;
+}
+.wb-table th {
+  color: var(--anatomy-muted);
+  font-weight: 500;
+  background: var(--anatomy-page);
+}
+.wb-list {
+  margin: 0;
+  padding-left: 16px;
+  display: grid;
+  gap: 4px;
+}
+.wb-disclaimer {
+  font-family: var(--anatomy-mono);
+  font-size: 10.5px;
+  color: var(--anatomy-muted);
+  border-top: 1px solid var(--anatomy-faint);
+  padding-top: 10px;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+@media (max-width: 560px) {
+  .wb-card {
+    padding: 13px 12px;
+  }
+}
